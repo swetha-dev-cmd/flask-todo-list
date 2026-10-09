@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask To-Do List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with username and logout -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+    <h1 style="margin: 0;">My To-Do List</h1>
+    
+    <div style="display: flex; align-items: center; gap: 12px;">
+       <div style="width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #8b5cf6); display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; font-weight: bold; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+    {{ username[0] | upper }}
+</div>
+        
+        <div style="text-align: right;">
+            <p style="margin: 0; font-size: 14px; color: #555;">Hello, <strong>{{ username }}</strong></p>
+            <a href="/logout" style="font-size: 13px; color: #ef4444; text-decoration: none;">Logout</a>
+        </div>
+    </div>
+</div>
+
+        <!-- Add Task Form -->
+        <form action="/add" method="POST" class="add-form">
+            <input type="text" name="content" placeholder="What do you need to do?" required autofocus>
+            <button type="submit">Add Task</button>
+        </form>
+
+        <!-- Task List -->
+        <ul class="task-list">
+            {% for task in tasks %}
+            <li class="task-item {% if task.completed %}completed{% endif %}">
+                <span class="task-content">{{ task.content }}</span>
+                <span class="task-date">{{ task.created_at }}</span>
+                <div class="actions">
+                    <a href="/complete/{{ task.id }}" class="btn complete">
+                        {% if task.completed %}Undo{% else %}Complete{% endif %}
+                    </a>
+                    <a href="/delete/{{ task.id }}" class="btn delete">Delete</a>
+                </div>
+            </li>
+            {% else %}
+            <li class="empty">No tasks yet. Add one above!</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
